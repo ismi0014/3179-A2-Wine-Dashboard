@@ -1,0 +1,52 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": {"step": 26},
+  "autosize": {"type": "fit", "contains": "padding"},
+  "data": {"url": "data/variety_by_year.csv"},
+  "encoding": {
+    "y": {
+      "field": "variety", "type": "nominal", "title": null,
+      "sort": ["Shiraz", "Chardonnay", "Cabernet Sauvignon", "Merlot", "Sémillon", "Sauvignon Blanc", "Colombard", "Muscat of Alexandria", "Pinot Gris", "Pinot Noir", "Riesling", "Petit Verdot"],
+      "axis": {"labelPadding": 24, "ticks": false, "domain": false}
+    }
+  },
+  "layer": [
+    {
+      "mark": {"type": "rect", "stroke": "white", "strokeWidth": 1},
+      "encoding": {
+        "x": {"field": "year", "type": "ordinal", "title": "Vintage year", "axis": {"labelAngle": 0, "labelOverlap": true, "orient": "top"}},
+        "color": {
+          "field": "share_pct", "type": "quantitative", "title": "Share of that year's harvest (%)",
+          "scale": {
+            "type": "threshold",
+            "domain": [1.5, 3, 5, 10, 15, 20],
+            "range": ["#f8ecee", "#efd7db", "#e0b5bd", "#cb8d99", "#b0606f", "#8f3d4e", "#6e2233"]
+          }
+        },
+        "tooltip": [
+          {"field": "variety", "type": "nominal", "title": "Grape"},
+          {"field": "year", "type": "ordinal", "title": "Year"},
+          {"field": "share_pct", "type": "quantitative", "title": "Share of harvest (%)", "format": ".1f"},
+          {"field": "tonnes", "type": "quantitative", "title": "Tonnes", "format": ",.0f"}
+        ]
+      }
+    },
+    {
+      "transform": [{"filter": "datum.year == 2001"}],
+      "mark": {"type": "circle", "size": 90, "opacity": 1, "stroke": "white", "strokeWidth": 1},
+      "encoding": {
+        "x": {"value": -12},
+        "color": {
+          "field": "colour", "type": "nominal", "title": "Grape type",
+          "scale": {"domain": ["Red", "White"], "range": ["#7b2d3b", "#d9b44a"]}
+        },
+        "tooltip": [
+          {"field": "variety", "type": "nominal", "title": "Grape"},
+          {"field": "colour", "type": "nominal", "title": "Type"}
+        ]
+      }
+    }
+  ],
+  "resolve": {"scale": {"color": "independent"}}
+}

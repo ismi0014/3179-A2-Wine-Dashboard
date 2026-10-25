@@ -1,0 +1,72 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "config": {"view": {"stroke": null}},
+  "width": "container",
+  "height": 520,
+  "autosize": {"type": "fit", "contains": "padding"},
+  "projection": {"type": "mercator"},
+  "layer": [
+    {
+      "data": {"url": "data/australia_south.topojson", "format": {"type": "topojson", "feature": "states"}},
+      "mark": {"type": "geoshape", "fill": "#ece7e3", "stroke": "white"}
+    },
+    {
+      "data": {
+        "values": [
+          {"name": "SOUTH AUSTRALIA", "longitude": 139.6, "latitude": -32.5},
+          {"name": "NEW SOUTH WALES", "longitude": 147.5, "latitude": -32.6},
+          {"name": "VICTORIA", "longitude": 143.3, "latitude": -37.8}
+        ]
+      },
+      "mark": {"type": "text", "fontSize": 12, "fontWeight": "bold", "color": "#b8afa9"},
+      "encoding": {
+        "longitude": {"field": "longitude", "type": "quantitative"},
+        "latitude": {"field": "latitude", "type": "quantitative"},
+        "text": {"field": "name", "type": "nominal"}
+      }
+    },
+    {
+      "data": {"url": "data/dots.csv"},
+      "mark": {"type": "circle", "size": 16, "opacity": 0.75},
+      "encoding": {
+        "longitude": {"field": "longitude", "type": "quantitative"},
+        "latitude": {"field": "latitude", "type": "quantitative"},
+        "color": {
+          "field": "type",
+          "type": "nominal",
+          "title": "Grape type",
+          "scale": {"domain": ["Red", "White"], "range": ["#7b2d3b", "#d9b44a"]}
+        },
+        "tooltip": [
+          {"field": "region", "type": "nominal", "title": "Region"},
+          {"field": "type", "type": "nominal", "title": "Grape type"}
+        ]
+      }
+    },
+    {
+      "data": {"url": "data/regions_se.csv"},
+      "transform": [
+        {"filter": "indexof(['Riverland', 'Murray Darling - Swan Hill', 'Riverina'], datum.region) >= 0"},
+        {"calculate": "replace(datum.region, ' - ', ' – ')", "as": "label"}
+      ],
+      "mark": {"type": "text", "fontSize": 11, "fontWeight": "bold", "color": "#2b2226", "dy": -62},
+      "encoding": {
+        "longitude": {"field": "longitude", "type": "quantitative"},
+        "latitude": {"field": "latitude", "type": "quantitative"},
+        "text": {"field": "label", "type": "nominal"}
+      }
+    },
+    {
+      "data": {"url": "data/regions_se.csv"},
+      "transform": [
+        {"filter": "indexof(['Coonawarra', 'Yarra Valley', 'Hunter Valley'], datum.region) >= 0"}
+      ],
+      "mark": {"type": "text", "fontSize": 11, "fontWeight": "bold", "color": "#2b2226", "dy": -34},
+      "encoding": {
+        "longitude": {"field": "longitude", "type": "quantitative"},
+        "latitude": {"field": "latitude", "type": "quantitative"},
+        "text": {"field": "region", "type": "nominal"}
+      }
+    }
+  ]
+}

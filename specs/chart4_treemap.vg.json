@@ -1,0 +1,81 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "width": 780,
+  "height": 540,
+  "padding": 5,
+  "autosize": "none",
+  "data": [
+    {
+      "name": "tree",
+      "url": "data/treemap_2023.csv",
+      "format": {"type": "csv", "parse": {"tonnes": "number"}},
+      "transform": [
+        {"type": "stratify", "key": "id", "parentKey": "parent"},
+        {
+          "type": "treemap", "field": "tonnes",
+          "sort": {"field": "value", "order": "descending"},
+          "method": "squarify", "ratio": 1.4, "round": true,
+          "paddingInner": 2, "paddingTop": 20, "paddingLeft": 3, "paddingRight": 3, "paddingBottom": 3,
+          "size": [{"signal": "width"}, {"signal": "height"}]
+        }
+      ]
+    },
+    {"name": "states", "source": "tree", "transform": [{"type": "filter", "expr": "datum.depth === 1"}]},
+    {"name": "leaves", "source": "tree", "transform": [{"type": "filter", "expr": "!datum.children"}]}
+  ],
+  "scales": [
+    {
+      "name": "color", "type": "ordinal",
+      "domain": ["South Australia", "New South Wales", "Victoria", "Western Australia", "Tasmania"],
+      "range": ["#8c3a48", "#c99a3e", "#3f6b7d", "#7d8a3f", "#7a5c8a"]
+    },
+    {
+      "name": "textcolor", "type": "ordinal",
+      "domain": ["South Australia", "New South Wales", "Victoria", "Western Australia", "Tasmania"],
+      "range": ["#ffffff", "#2b2226", "#ffffff", "#ffffff", "#ffffff"]
+    }
+  ],
+  "legends": [
+    {"fill": "color", "title": "State", "orient": "bottom", "direction": "horizontal"}
+  ],
+  "marks": [
+    {
+      "type": "rect", "from": {"data": "states"}, "interactive": false,
+      "encode": {"update": {
+        "x": {"field": "x0"}, "y": {"field": "y0"}, "x2": {"field": "x1"}, "y2": {"field": "y1"},
+        "fill": {"value": "#f3eeec"}
+      }}
+    },
+    {
+      "type": "rect", "from": {"data": "leaves"},
+      "encode": {
+        "enter": {"tooltip": {"signal": "{'State': datum.state, 'Grape': datum.name, 'Tonnes': format(datum.tonnes, ',.0f')}"}},
+        "update": {
+          "x": {"field": "x0"}, "y": {"field": "y0"}, "x2": {"field": "x1"}, "y2": {"field": "y1"},
+          "fill": {"scale": "color", "field": "state"},
+          "stroke": {"value": "white"}, "strokeWidth": {"value": 1}
+        },
+        "hover": {"stroke": {"value": "#2b2226"}, "strokeWidth": {"value": 2.5}}
+      }
+    },
+    {
+      "type": "text", "from": {"data": "leaves"}, "interactive": false,
+      "encode": {"update": {
+        "x": {"signal": "datum.x0 + 5"}, "y": {"signal": "datum.y0 + 5"}, "baseline": {"value": "top"},
+        "fontSize": {"signal": "datum.x1 - datum.x0 > 90 ? 11 : 10"},
+        "limit": {"signal": "datum.x1 - datum.x0 - 8"}, "ellipsis": {"value": "…"},
+        "fill": {"scale": "textcolor", "field": "state"},
+        "text": {"signal": "(datum.x1 - datum.x0 > 90 && datum.y1 - datum.y0 > 22) ? datum.name : ((datum.x1 - datum.x0 > 44 && datum.y1 - datum.y0 > 16) ? ({'Cabernet Sauvignon': 'Cab. Sauv.', 'Sauvignon Blanc': 'Sauv. Blanc', 'Muscat of Alexandria': 'Muscat', 'Other varieties': 'Other'})[datum.name] || datum.name : '')"}
+      }}
+    },
+    {
+      "type": "text", "from": {"data": "states"}, "interactive": false,
+      "encode": {"update": {
+        "x": {"signal": "datum.x0 + 4"}, "y": {"signal": "datum.y0 + 4"}, "baseline": {"value": "top"},
+        "fontSize": {"value": 12}, "fontWeight": {"value": "bold"}, "fill": {"value": "#2b2226"},
+        "limit": {"signal": "datum.x1 - datum.x0 - 6"}, "ellipsis": {"value": "…"},
+        "text": {"signal": "datum.x1 - datum.x0 <= 50 ? '' : (datum.name === 'Western Australia' && datum.x1 - datum.x0 < 120 ? 'WA' : datum.name)"}
+      }}
+    }
+  ]
+}

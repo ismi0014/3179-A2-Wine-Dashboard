@@ -1,0 +1,121 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 340,
+  "autosize": {"type": "fit-x", "contains": "padding"},
+  "data": {
+    "url": "data/regions_profile.csv",
+    "format": {"type": "csv", "parse": {"tonnes": "number", "temp_c": "number", "score": "number", "bottle_usd": "number", "reviews": "number"}}
+  },
+  "transform": [
+    {"window": [{"op": "row_number", "as": "idx"}]},
+    {"fold": ["tonnes", "bottle_usd", "score", "temp_c"]},
+    {"joinaggregate": [{"op": "min", "field": "value", "as": "min"}, {"op": "max", "field": "value", "as": "max"}], "groupby": ["key"]},
+    {"calculate": "(datum.value - datum.min) / (datum.max - datum.min)", "as": "norm_val"},
+    {"calculate": "datum.key == 'tonnes' ? format(datum.max, ',.0f') : datum.key == 'temp_c' ? format(datum.max, '.1f') + '°C' : datum.key == 'score' ? format(datum.max, '.1f') : '$' + format(datum.max, '.0f')", "as": "maxlabel"},
+    {"calculate": "datum.key == 'tonnes' ? format(datum.min, ',.0f') : datum.key == 'temp_c' ? format(datum.min, '.1f') + '°C' : datum.key == 'score' ? format(datum.min, '.1f') : '$' + format(datum.min, '.0f')", "as": "minlabel"}
+  ],
+  "layer": [
+    {
+      "mark": {"type": "rule", "color": "#cccccc"},
+      "encoding": {
+        "detail": {"aggregate": "count"},
+        "x": {"field": "key", "type": "nominal", "sort": ["tonnes", "bottle_usd", "score", "temp_c"]}
+      }
+    },
+    {
+      "mark": {"type": "line", "strokeWidth": 2.5},
+      "params": [{"name": "highlight", "select": {"type": "point", "fields": ["state"]}, "bind": "legend"}],
+      "encoding": {
+        "x": {"field": "key", "type": "nominal", "sort": ["tonnes", "bottle_usd", "score", "temp_c"]},
+        "y": {"field": "norm_val", "type": "quantitative", "axis": null, "scale": {"domain": [0, 1]}},
+        "detail": {"field": "region", "type": "nominal"},
+        "color": {
+          "field": "state", "type": "nominal", "title": "State (click to highlight)",
+          "scale": {"domain": ["South Australia", "Victoria", "Western Australia", "New South Wales"],
+                    "range": ["#8c3a48", "#3f6b7d", "#7d8a3f", "#c99a3e"]}
+        },
+        "opacity": {"condition": {"param": "highlight", "value": 0.85}, "value": 0.15},
+        "tooltip": [
+          {"field": "region", "type": "nominal", "title": "Region"},
+          {"field": "state", "type": "nominal", "title": "State"},
+          {"field": "tonnes", "type": "quantitative", "title": "Grapes crushed 2023 (tonnes)", "format": ",.0f"},
+          {"field": "bottle_usd", "type": "quantitative", "title": "Median bottle price (US$)", "format": ",.0f"},
+          {"field": "score", "type": "quantitative", "title": "Average expert score", "format": ".1f"},
+          {"field": "temp_c", "type": "quantitative", "title": "Growing-season temperature (°C)", "format": ".1f"},
+          {"field": "reviews", "type": "quantitative", "title": "Number of reviews"}
+        ]
+      }
+    },
+    {
+      "transform": [
+        {"filter": "datum.idx == 1"},
+        {"calculate": "datum.key == 'tonnes' ? [20000, 40000, 60000] : datum.key == 'bottle_usd' ? [20, 30, 40] : datum.key == 'score' ? [88, 89, 90, 91] : [18, 20, 22]", "as": "tv"},
+        {"flatten": ["tv"], "as": ["tickval"]},
+        {"calculate": "(datum.tickval - datum.min) / (datum.max - datum.min)", "as": "tickpos"},
+        {"calculate": "datum.key == 'tonnes' ? format(datum.tickval, ',.0f') : datum.key == 'bottle_usd' ? '$' + datum.tickval : datum.key == 'temp_c' ? datum.tickval + '°C' : format(datum.tickval, '.0f')", "as": "ticklabel"}
+      ],
+      "mark": {"type": "tick", "color": "#999999", "size": 8, "thickness": 1},
+      "encoding": {
+        "x": {"field": "key", "type": "nominal", "sort": ["tonnes", "bottle_usd", "score", "temp_c"]},
+        "y": {"field": "tickpos", "type": "quantitative", "axis": null, "scale": {"domain": [0, 1]}}
+      }
+    },
+    {
+      "transform": [
+        {"filter": "datum.idx == 1"},
+        {"calculate": "datum.key == 'tonnes' ? [20000, 40000, 60000] : datum.key == 'bottle_usd' ? [20, 30, 40] : datum.key == 'score' ? [88, 89, 90, 91] : [18, 20, 22]", "as": "tv"},
+        {"flatten": ["tv"], "as": ["tickval"]},
+        {"calculate": "(datum.tickval - datum.min) / (datum.max - datum.min)", "as": "tickpos"},
+        {"calculate": "datum.key == 'tonnes' ? format(datum.tickval, ',.0f') : datum.key == 'bottle_usd' ? '$' + datum.tickval : datum.key == 'temp_c' ? datum.tickval + '°C' : format(datum.tickval, '.0f')", "as": "ticklabel"}
+      ],
+      "mark": {"type": "text", "style": "label", "fontSize": 10, "color": "white", "stroke": "white", "strokeWidth": 4, "strokeJoin": "round", "dx": -8},
+      "encoding": {
+        "x": {"field": "key", "type": "nominal", "sort": ["tonnes", "bottle_usd", "score", "temp_c"]},
+        "y": {"field": "tickpos", "type": "quantitative", "axis": null, "scale": {"domain": [0, 1]}},
+        "text": {"field": "ticklabel", "type": "nominal"}
+      }
+    },
+    {
+      "transform": [
+        {"filter": "datum.idx == 1"},
+        {"calculate": "datum.key == 'tonnes' ? [20000, 40000, 60000] : datum.key == 'bottle_usd' ? [20, 30, 40] : datum.key == 'score' ? [88, 89, 90, 91] : [18, 20, 22]", "as": "tv"},
+        {"flatten": ["tv"], "as": ["tickval"]},
+        {"calculate": "(datum.tickval - datum.min) / (datum.max - datum.min)", "as": "tickpos"},
+        {"calculate": "datum.key == 'tonnes' ? format(datum.tickval, ',.0f') : datum.key == 'bottle_usd' ? '$' + datum.tickval : datum.key == 'temp_c' ? datum.tickval + '°C' : format(datum.tickval, '.0f')", "as": "ticklabel"}
+      ],
+      "mark": {"type": "text", "style": "label", "fontSize": 10, "color": "#7a6f73", "dx": -8},
+      "encoding": {
+        "x": {"field": "key", "type": "nominal", "sort": ["tonnes", "bottle_usd", "score", "temp_c"]},
+        "y": {"field": "tickpos", "type": "quantitative", "axis": null, "scale": {"domain": [0, 1]}},
+        "text": {"field": "ticklabel", "type": "nominal"}
+      }
+    },
+    {
+      "transform": [{"filter": "datum.idx == 1"}],
+      "mark": {"type": "text", "style": "label", "fontWeight": "bold", "dy": -12},
+      "encoding": {
+        "x": {"field": "key", "type": "nominal", "sort": ["tonnes", "bottle_usd", "score", "temp_c"]},
+        "y": {"value": 0},
+        "text": {"field": "maxlabel", "type": "nominal"}
+      }
+    },
+    {
+      "transform": [{"filter": "datum.idx == 1"}],
+      "mark": {"type": "text", "style": "label", "fontWeight": "bold", "dy": 12},
+      "encoding": {
+        "x": {"field": "key", "type": "nominal", "sort": ["tonnes", "bottle_usd", "score", "temp_c"]},
+        "y": {"value": 340},
+        "text": {"field": "minlabel", "type": "nominal"}
+      }
+    }
+  ],
+  "config": {
+    "axisX": {
+      "domain": false, "labelAngle": 0, "tickColor": "#dddddd", "title": null, "labelPadding": 26, "labelFontWeight": "bold",
+      "labelExpr": "datum.value == 'tonnes' ? 'Grapes crushed (tonnes)' : datum.value == 'bottle_usd' ? 'Median bottle price (US$)' : datum.value == 'score' ? 'Average expert score' : 'Growing-season temperature'"
+    },
+    "view": {"stroke": null},
+    "style": {"label": {"baseline": "middle", "align": "right", "dx": -6, "fontSize": 11}}
+  }
+}

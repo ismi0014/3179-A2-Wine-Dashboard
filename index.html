@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Australian Wines: where it grows and which regions deliver</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+  <script src="vega_lite_vis.js" defer></script>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>Where Australia's wine comes from, and which regions deliver quality</h1>
+    <p class="dek">Australia crushed about 1.2 million tonnes of wine grapes in 2023. Scroll to see where they grew, which grapes dominate, and how experts rate the result.</p>
+  </div>
+</header>
+
+<main>
+
+  <section class="act">
+    <div class="wrap">
+      <h2>Where does it come from?</h2>
+      <p class="bridge">Most of Australia's wine grapes grow in a few places in the south-east.</p>
+
+      <figure>
+        <h3>Which states grow the most?</h3>
+        <p class="how">Each state is shaded by its share of Australia's total wine grape crush in 2023. The darker the shade, the bigger the share. Grey states have no wine grape data.</p>
+        <div class="chart-card">
+          <p class="chart-title">Share of Australia's 2023 wine grape crush, by state</p>
+          <div id="vis1" class="chart"></div>
+        </div>
+        <p class="analysis"><strong>Analysis.</strong> South Australia crushed 55% of the nation's wine grapes, followed by New South Wales (27%) and Victoria (13%). Together these three states make up about 96% of the crush, and Western Australia, Tasmania and Queensland share the remaining 4%.</p>
+      </figure>
+
+      <figure>
+        <h3>Which regions grow the most?</h3>
+        <p class="how">Each circle is a wine region, placed at its approximate centre. A bigger circle means more grapes crushed in 2023. Wine-red circles are regions that mainly grow red grapes, and gold circles mainly white. Regions in Western Australia, Tasmania and Queensland are outside this view.</p>
+        <div class="chart-card">
+          <p class="chart-title">Wine grapes crushed in 2023, by region (south-eastern Australia)</p>
+          <div id="vis2" class="chart"></div>
+        </div>
+        <p class="analysis"><strong>Analysis.</strong> Fame doesn't always reflect production. The Riverland, Murray Darling – Swan Hill and the Riverina areas each crush about 200,000 tonnes or more. Barossa Valley which is one of Australia's best-known names, crushes about 66,000 tonnes, around 6% of the national total.</p>
+      </figure>
+    </div>
+  </section>
+
+  <section class="act tint">
+    <div class="wrap">
+      <h2>What do we grow?</h2>
+      <p class="bridge">Shiraz and Chardonnay lead, but wine preferences are changing.</p>
+
+      <figure>
+        <h3>Red versus white over time</h3>
+        <p class="how">Each line shows how many tonnes of red or white wine grapes were crushed each year from 2001 to 2023. Wine-red is red grapes and gold is white grapes. Hover over a point to see the exact tonnes.</p>
+        <div class="chart-card">
+          <p class="chart-title">Wine grapes crushed in Australia each year, 2001 to 2023, red and white</p>
+          <div id="vis3" class="chart"></div>
+        </div>
+        <p class="analysis"><strong>Analysis.</strong> Red grapes out crushed white grapes in 20 of the 23 years. The peak was at 1.08 million tonnes in 2004. White was ahead only in 2007, 2011 and 2012. The 2023 crush of 1.19 million tonnes was the smallest crush which was 35% below the 2004 total of 1.85 million.</p>
+      </figure>
+
+      <figure>
+        <h3>Who grows what?</h3>
+        <p class="how">Each large block is a state, and each tile inside it is a grape. A bigger tile means more grapes crushed in 2023. Hover over a tile to see its exact tonnes. Queensland (under 0.05% of the harvest) is left out.</p>
+        <div class="chart-card">
+          <p class="chart-title">2023 wine grape crush, by state and grape variety</p>
+          <div id="vis4" class="chart fixed"></div>
+        </div>
+        <p class="analysis"><strong>Analysis.</strong> South Australia dominates, led by Shiraz at about 212,000 tonnes. In New South Wales the biggest named grape is Chardonnay (68,000 tonnes), and in Victoria it is Shiraz (39,000 tonnes).</p>
+      </figure>
+
+      <figure>
+        <h3>Which grapes are rising and falling?</h3>
+        <p class="how">Each square is one grape in one year. Darker means that grape made up a bigger share of Australia's harvest that year. The dot beside each name shows whether the grape is red or white.</p>
+        <div class="chart-card">
+          <p class="chart-title">Each grape's share of Australia's wine grape crush, 2001 to 2023</p>
+          <div id="vis5" class="chart"></div>
+        </div>
+        <p class="analysis"><strong>Analysis.</strong> Shiraz grew from 23% of the harvest in 2001 to 26% in 2023, and Sauvignon Blanc rose from 2% to 6.5%. Pinot Gris went from 0 to 4%, while Cabernet Sauvignon fell from 18% to 11.5%.</p>
+      </figure>
+
+      <figure>
+        <h3>Where do red and white grapes grow?</h3>
+        <p class="how">Each dot is 1,000 tonnes of grapes crushed in 2023, coloured red for red grapes and gold for white grapes. Dots are scattered around each region's approximate centre, not at real vineyards. Western Australia and Tasmania, 4% of the national crush, are not shown on this map.</p>
+        <div class="chart-card">
+          <p class="chart-title">Red and white wine grapes crushed in 2023 (1 dot = 1,000 tonnes)</p>
+          <div id="vis6" class="chart"></div>
+        </div>
+        <p class="analysis"><strong>Analysis.</strong> A lot of the dots are clustered around the Murray River, with a lot of red and white grapes in the Riverland, Murray Darling and the Riverina. Red dots cluster around the Barossa, McLaren Vale and Coonawarra, while the Murray Darling and the Riverina lean towards white.</p>
+      </figure>
+    </div>
+  </section>
+
+  <section class="act">
+    <div class="wrap">
+      <h2>How good is it?</h2>
+      <p class="bridge">Expert scores and prices, from a 2017 snapshot of reviewed wines.</p>
+
+      <figure>
+        <h3>How do experts score our wines?</h3>
+        <p class="how">Each hump shows where a grape's scores cluster. A hump further right means higher scores, and a taller, narrower hump means reviewers scored it more consistently. Red humps are red grapes and gold humps are white grapes.</p>
+        <div class="chart-card">
+          <p class="chart-title">How experts scored eight Australian grape varieties (WineEnthusiast reviews, 2017)</p>
+          <div id="vis7" class="chart fixed"></div>
+        </div>
+        <p class="analysis"><strong>Analysis.</strong> Shiraz and Grenache score highest, with a typical score of 90, and more than half of Shiraz reviews reach 90 or more. Sauvignon Blanc is the most consistent but sits lower, with a typical score of 87 and only 13% of reviews at 90 or more. Sauvignon Blanc, Red Blend and Grenache have fewer than 80 reviews each, so their curves are less reliable.</p>
+      </figure>
+
+      <figure>
+        <h3>Does paying more get you a better wine?</h3>
+        <p class="how">Each dot is one reviewed wine, placed by its bottle price and its expert score. Each step to the right is a bigger jump in price. The gold line shows the average score at each price. Wines over US$200 are left out.</p>
+        <div class="chart-card">
+          <p class="chart-title">Bottle price and expert score for 2,274 reviewed Australian wines</p>
+          <div id="vis8" class="chart"></div>
+        </div>
+        <p class="analysis"><strong>Analysis.</strong> Higher prices bring better scores, but the gains become smaller. The typical score rises from 86 for wines of $15 or less to 90 for wines of $25 to $40, and then only to 92 for wines over $70. Spending more than $40 gets you little gain. </p>
+      </figure>
+    </div>
+  </section>
+
+  <section class="act tint">
+    <div class="wrap">
+      <h2>What sets each region apart?</h2>
+      <p class="bridge">Fifteen regions with enough reviews to compare.</p>
+
+      <figure>
+        <h3>Four ways to compare regions</h3>
+        <p class="how">Each line is one wine region. Follow a line from left to right to see how many grapes it crushes, what a bottle costs, how well experts score its wines and how warm it is. Click a state in the key to highlight its regions.</p>
+        <div class="chart-card">
+          <p class="chart-title">Size, bottle price, expert score and growing-season temperature for 15 wine regions</p>
+          <div id="vis9" class="chart"></div>
+        </div>
+        <p class="analysis"><strong>Analysis.</strong> Size and price do not line up. Barossa Valley crushes the most (66,031 tonnes) yet its bottles are mid priced, while the small Mornington Peninsula (1,666 tonnes) has the most expensive bottles, at a median of $50. Rutherglen has the highest average score (91.2), and Hunter Valley is the warmest region (22.3°C).</p>
+      </figure>
+
+      <figure>
+        <h3>Which grapes go where?</h3>
+        <p class="how">Each ribbon is one grape's harvest in one state, and its thickness shows the tonnes crushed in 2023. Wine-red ribbons are red grapes, gold ribbons are white grapes, and grey is a mix of smaller varieties. Follow a grape from left to right to see which states grow it.</p>
+        <div class="chart-card">
+          <p class="chart-title">2023 wine grape crush, from grape variety to state</p>
+          <div id="vis10" class="chart fixed"></div>
+        </div>
+        <p class="analysis"><strong>Analysis.</strong> About two-thirds of Shiraz is crushed in South Australia, while Chardonnay is spread more evenly: about half in South Australia and nearly a third in New South Wales. Western Australia and Tasmania receive only thin ribbons.</p>
+      </figure>
+    </div>
+  </section>
+
+  <section class="takeaways">
+    <div class="wrap">
+      <h2>Three things to remember</h2>
+      <ul>
+        <li>Three inland regions crush more than two-thirds of Australia's wine grapes.</li>
+        <li>Sauvignon Blanc and Pinot Gris have surged since 2001, while Cabernet Sauvignon has slipped.</li>
+        <li>Size and price don't line up - Barossa Valley crushes the most, but Mornington Peninsula has the most expensive bottles.</li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="author"><strong>Created by Isaiah Smith (35071192)</strong><br>FIT3179 Data Visualisation, Monash University. Published October 2026.</p>
+    <h2>Sources</h2>
+    <ul>
+      <li>Anderson, K. and Puga, G., <a href="https://researchdata.edu.au/database-australian-winegrape-1956-2023/4056458">Australian winegrape vine area, production and price database by region and variety, 1956 to 2023</a>, University of Adelaide (CC BY 4.0).</li>
+      <li>WineEnthusiast wine reviews, <a href="https://www.kaggle.com/zynicide/wine-reviews">Kaggle</a>.</li>
+      <li>State boundaries: <a href="https://www.naturalearthdata.com">Natural Earth</a></li>
+    </ul>
+    <p class="small">Dot and circle positions on the maps are approximate region centres, not vineyard locations. Ratings are US wine reviews from 2017, not a measure of current quality. Charts built with Vega and Vega-Lite.</p>
+  </div>
+</footer>
+
+</body>
+</html>
